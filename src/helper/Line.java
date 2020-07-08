@@ -1,4 +1,4 @@
-package main;
+package helper;
 
 public class Line {
     public Vec2 point1;

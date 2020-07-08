@@ -1,5 +1,8 @@
 package main;
 
+import grid.Grid;
+import grid.GridPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +10,7 @@ public class MainWindow extends JFrame {
 
     private int width;
     private int height;
-    private JPanel mainPanel;
+    private GridPanel mainPanel;
 
     public MainWindow(int w, int h){
 
@@ -20,13 +23,14 @@ public class MainWindow extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //mainPanel stuff
-        Grid grid = new Grid(10,10);
-
-        mainPanel = new GridPanel(width,height - 25, grid);
+        mainPanel = new GridPanel(width,height - 25);
         this.add(mainPanel);
-
-
         this.setVisible(true);
     }
+
+    public void update(Grid grid){
+        mainPanel.update(grid);
+    }
+
 
 }

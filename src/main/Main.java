@@ -1,16 +1,22 @@
 package main;
 
+import grid.Grid;
+import helper.Direction;
+
 public class Main {
 
     public static boolean stopLoop = false;
 
     public static void main(String[] args){
         MainWindow mainWindow = new MainWindow(1000,1025);
+        mainWindow.getGraphics();
         Grid grid = new Grid(5,5);
 
         drawCLI(grid);
 
-
+        while(!stopLoop){
+            mainWindow.update(grid);
+        }
 
     }
 

@@ -1,4 +1,4 @@
-package main;
+package helper;
 
 public class Direction {
 

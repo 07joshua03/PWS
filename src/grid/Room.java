@@ -1,6 +1,6 @@
-package main;
+package grid;
 
-import java.awt.*;
+import helper.Direction;
 
 public class Room {
 

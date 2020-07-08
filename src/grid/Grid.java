@@ -1,14 +1,16 @@
-package main;
+package grid;
 
-import java.awt.*;
-import java.awt.geom.Line2D;
+import helper.Direction;
+import helper.Line;
+import helper.Vec2;
+
 import java.util.ArrayList;
 
 public class Grid {
 
-    private int gridWidth;
-    private int gridHeight;
-    private Room[][] gridArray;
+    private final int gridWidth;
+    private final int gridHeight;
+    private final Room[][] gridArray;
 
 
     public Grid(int gw, int gh){    //(0,0) at top-left
@@ -28,23 +30,23 @@ public class Grid {
         }
     }
 
-    public Grid(int gridWidth, int gridHeight, Room[][] ra){    //(0,0) at top-left
-        this.gridWidth = gridWidth;
-        this.gridHeight = gridHeight;
-        this.gridArray = ra;
-        gridArray = new Room[gridWidth][gridHeight];
-        for(int i = 0; i < gridWidth; i++){
-            for(int j = 0; j < gridHeight; j++){
-                gridArray[i][j] = new Room();
-
-                //Creating border walls
-                if(i==0) gridArray[i][j].addWall(Direction.left);
-                if(i==gridWidth-1) gridArray[i][j].addWall(Direction.right);
-                if(j==0) gridArray[i][j].addWall(Direction.up);
-                if(j==gridHeight-1) gridArray[i][j].addWall(Direction.down);
-            }
-        }
-    }
+//    public Grid(int gridWidth, int gridHeight, Room[][] ra){    //(0,0) at top-left
+//        this.gridWidth = gridWidth;
+//        this.gridHeight = gridHeight;
+//        this.gridArray = ra;
+//        gridArray = new Room[gridWidth][gridHeight];
+//        for(int i = 0; i < gridWidth; i++){
+//            for(int j = 0; j < gridHeight; j++){
+//                gridArray[i][j] = new Room();
+//
+//                //Creating border walls
+//                if(i==0) gridArray[i][j].addWall(Direction.left);
+//                if(i==gridWidth-1) gridArray[i][j].addWall(Direction.right);
+//                if(j==0) gridArray[i][j].addWall(Direction.up);
+//                if(j==gridHeight-1) gridArray[i][j].addWall(Direction.down);
+//            }
+//        }
+//    }
 
     public Room getRoom(int x,int y){
         return gridArray[x][y];
@@ -68,8 +70,8 @@ public class Grid {
     }
 
     public Vec2 getScreenCoords(int screenWidth, int screenHeight, int x, int y){
-        int locX = (int)(screenWidth * 0.1 + (double)(screenWidth-(screenWidth * 0.2)) / (gridWidth) * x);
-        int locY = (int)(screenHeight * 0.1 + (double)(screenHeight-(screenHeight * 0.2)) / (gridHeight) * y);
+        int locX = (int)(screenWidth * 0.1 + (screenWidth-(screenWidth * 0.2)) / (gridWidth) * x);
+        int locY = (int)(screenHeight * 0.1 + (screenHeight-(screenHeight * 0.2)) / (gridHeight) * y);
         System.out.println("x:" + locX + "   y:" + locY);
         return new Vec2(locX, locY);
     }
