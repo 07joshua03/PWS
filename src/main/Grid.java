@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
 public class Grid {
 
@@ -26,9 +28,9 @@ public class Grid {
         }
     }
 
-    public Grid(int gw, int gh, Room[][] ra){    //(0,0) at top-left
-        this.gridWidth = gw;
-        this.gridHeight = gh;
+    public Grid(int gridWidth, int gridHeight, Room[][] ra){    //(0,0) at top-left
+        this.gridWidth = gridWidth;
+        this.gridHeight = gridHeight;
         this.gridArray = ra;
         gridArray = new Room[gridWidth][gridHeight];
         for(int i = 0; i < gridWidth; i++){
@@ -50,20 +52,51 @@ public class Grid {
 
     public void addWall(int x,int y, int direction){
         gridArray[x][y].addWall(direction);
-//        switch (direction){
-//            case Direction.up:
-//                if (y-1 >= 0) gridArray[x][y-1].addWall(Direction.down);
-//            case Direction.right:
-//                if (x+1 < gridWidth) gridArray[x+1][y].addWall(Direction.left);
-//            case Direction.down:
-//                if (y+1 < gridHeight) gridArray[x][y+1].addWall(Direction.up);
-//            case Direction.left:
-//                if (x-1 >= 0) gridArray[x-1][y].addWall(Direction.right);
-//        }
+        switch (direction){
+            case Direction.up:
+                if (y-1 >= 0) gridArray[x][y-1].addWall(Direction.down);
+                break;
+            case Direction.right:
+                if (x+1 < gridWidth) gridArray[x+1][y].addWall(Direction.left);
+                break;
+            case Direction.down:
+                if (y+1 < gridHeight) gridArray[x][y+1].addWall(Direction.up);
+                break;
+            case Direction.left:
+                if (x-1 >= 0) gridArray[x-1][y].addWall(Direction.right);
+        }
     }
 
-    public void displayGrid(Graphics g){
+    public Vec2 getScreenCoords(int screenWidth, int screenHeight, int x, int y){
+        int locX = (int)(screenWidth * 0.1 + (double)(screenWidth-(screenWidth * 0.2)) / (gridWidth) * x);
+        int locY = (int)(screenHeight * 0.1 + (double)(screenHeight-(screenHeight * 0.2)) / (gridHeight) * y);
+        System.out.println("x:" + locX + "   y:" + locY);
+        return new Vec2(locX, locY);
+    }
 
+    public ArrayList<Vec2> getGridCornerVecs(int screenWidth, int screenHeight){
+        ArrayList<Vec2> circles = new ArrayList<>();
+        for(int i = 0; i <= gridWidth; i++){
+            for (int j = 0; j <= gridHeight; j++){
+                circles.add(getScreenCoords(screenWidth,screenHeight,i,j));
+            }
+        }
+        return circles;
+
+
+    }
+
+    public ArrayList<Line> getGridWallLines(int screenWidth, int screenHeight){
+        ArrayList<Line> lines = new ArrayList<>();
+        for(int i = 0; i < gridWidth; i++){
+            for (int j = 0; j < gridHeight; j++){
+                if(getRoom(i,j).getWall(Direction.up)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i + 1,j)));
+                if(getRoom(i,j).getWall(Direction.right)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i+1,j), getScreenCoords(screenWidth, screenHeight, i + 1,j + 1)));
+                if(getRoom(i,j).getWall(Direction.down)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j+1), getScreenCoords(screenWidth, screenHeight, i + 1,j+1)));
+                if(getRoom(i,j).getWall(Direction.left)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i,j + 1)));
+            }
+        }
+        return lines;
     }
 
     public int getGridWidth(){

@@ -41,8 +41,4 @@ public class Room {
 
     }
 
-    public void drawRoom(Graphics g){
-
-    }
-
 }

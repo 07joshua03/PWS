@@ -20,17 +20,13 @@ public class MainWindow extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //mainPanel stuff
-        mainPanel = new JPanel();
-        mainPanel.setSize(width, height);
-        mainPanel.setBackground(new Color(0,0,0));
+        Grid grid = new Grid(10,10);
+
+        mainPanel = new GridPanel(width,height - 25, grid);
         this.add(mainPanel);
+
 
         this.setVisible(true);
     }
-
-    public void update(){
-
-    }
-
 
 }
