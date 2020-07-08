@@ -72,7 +72,6 @@ public class Grid {
     public Vec2 getScreenCoords(int screenWidth, int screenHeight, int x, int y){
         int locX = (int)(screenWidth * 0.1 + (screenWidth-(screenWidth * 0.2)) / (gridWidth) * x);
         int locY = (int)(screenHeight * 0.1 + (screenHeight-(screenHeight * 0.2)) / (gridHeight) * y);
-        System.out.println("x:" + locX + "   y:" + locY);
         return new Vec2(locX, locY);
     }
 

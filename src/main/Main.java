@@ -11,9 +11,7 @@ public class Main {
         MainWindow mainWindow = new MainWindow(1000,1025);
         mainWindow.getGraphics();
         Grid grid = new Grid(5,5);
-
         drawCLI(grid);
-
         while(!stopLoop){
             mainWindow.update(grid);
         }

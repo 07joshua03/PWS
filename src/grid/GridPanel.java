@@ -7,6 +7,7 @@ import helper.Vec2;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GridPanel extends JPanel {
 
@@ -32,6 +33,7 @@ public class GridPanel extends JPanel {
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+
         g.setColor(new Color(0,0,0));
         for (Vec2 coords: circles) {
             g.fillOval(coords.x - 5, coords.y - 5, 10,10);
