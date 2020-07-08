@@ -63,7 +63,7 @@ public class Grid {
     }
 
     public void displayGrid(Graphics g){
-        
+
     }
 
     public int getGridWidth(){
