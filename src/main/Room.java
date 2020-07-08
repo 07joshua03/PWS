@@ -5,7 +5,6 @@ public class Room {
     private boolean leftWall, upWall, rightWall, downWall = false;
 
     public Room(){
-
     }
 
     public void addWall(int direction){

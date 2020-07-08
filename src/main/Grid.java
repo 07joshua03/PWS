@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.*;
+
 public class Grid {
 
     private int gridWidth;
@@ -13,6 +15,12 @@ public class Grid {
         for(int i = 0; i < gridWidth; i++){
             for(int j = 0; j < gridHeight; j++){
                 gridArray[i][j] = new Room();
+
+                //Creating border walls
+                if(i==0) gridArray[i][j].addWall(Direction.down);
+                if(i==gridWidth-1) gridArray[i][j].addWall(Direction.up);
+                if(j==0) gridArray[i][j].addWall(Direction.left);
+                if(j==gridWidth-1) gridArray[i][j].addWall(Direction.right);
             }
         }
     }
@@ -34,7 +42,7 @@ public class Grid {
         }
     }
 
-    public void displayGrid(){
+    public void displayGrid(Graphics2D g){
 
     }
 
