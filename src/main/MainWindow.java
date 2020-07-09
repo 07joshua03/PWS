@@ -5,6 +5,8 @@ import grid.GridPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 public class MainWindow extends JFrame {
 
@@ -26,11 +28,11 @@ public class MainWindow extends JFrame {
         mainPanel = new GridPanel(width,height - 25);
         this.add(mainPanel);
         this.setVisible(true);
+
     }
 
     public void update(Grid grid){
-        mainPanel.update(grid);
+        mainPanel.updateGrid(grid);
     }
-
 
 }

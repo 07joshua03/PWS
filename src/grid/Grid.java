@@ -8,14 +8,22 @@ import java.util.ArrayList;
 
 public class Grid {
 
-    private final int gridWidth;
-    private final int gridHeight;
-    private final Room[][] gridArray;
+    private int gridWidth;
+    private int gridHeight;
+    private Room[][] gridArray;
 
 
     public Grid(int gw, int gh){    //(0,0) at top-left
+        changeGridSize(gw,gh);
+    }
+
+    public void changeGridSize(int gw, int gh){
         this.gridWidth = gw;
         this.gridHeight = gh;
+        generateRoom();
+    }
+
+    public void generateRoom(){
         gridArray = new Room[gridWidth][gridHeight];
         for(int i = 0; i < gridWidth; i++){
             for(int j = 0; j < gridHeight; j++){

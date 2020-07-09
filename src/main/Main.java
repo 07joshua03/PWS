@@ -1,20 +1,21 @@
 package main;
 
+import config.ConfigWindow;
 import grid.Grid;
 import helper.Direction;
 
 public class Main {
 
     public static boolean stopLoop = false;
+    public static MainWindow mainWindow;
+    public static Grid grid;
 
     public static void main(String[] args){
-        MainWindow mainWindow = new MainWindow(1000,1025);
-        mainWindow.getGraphics();
-        Grid grid = new Grid(5,5);
+        mainWindow = new MainWindow(1000,1025);
+        ConfigWindow configWindow = new ConfigWindow(200,400);
+        grid = new Grid(5,5);
         drawCLI(grid);
-        while(!stopLoop){
-            mainWindow.update(grid);
-        }
+        mainWindow.update(grid);
 
     }
 
