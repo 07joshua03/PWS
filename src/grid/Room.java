@@ -25,6 +25,22 @@ public class Room {
         }
     }
 
+    public void removeWall(int direction){
+        switch (direction){
+            case Direction.up:
+                upWall = false;
+                break;
+            case Direction.right:
+                rightWall = false;
+                break;
+            case Direction.down:
+                downWall = false;
+                break;
+            case Direction.left:
+                leftWall = false;
+        }
+    }
+
     public boolean getWall(int direction){
         switch (direction){
             case Direction.up:
@@ -39,6 +55,10 @@ public class Room {
                 return false;
         }
 
+    }
+
+    public boolean hasWall(){
+        return upWall || rightWall || downWall || leftWall;
     }
 
 }

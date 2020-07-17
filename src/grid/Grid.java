@@ -8,12 +8,14 @@ import java.util.ArrayList;
 
 public class Grid {
 
+    private String gridName;
     private int gridWidth;
     private int gridHeight;
     private Room[][] gridArray;
 
 
-    public Grid(int gw, int gh){    //(0,0) at top-left
+    public Grid(String gn, int gw, int gh){    //(0,0) at top-left
+        gridName = gn;
         changeGridSize(gw,gh);
     }
 
@@ -77,6 +79,23 @@ public class Grid {
         }
     }
 
+    public void removeWall(int x,int y, int direction){
+        gridArray[x][y].removeWall(direction);
+        switch (direction){
+            case Direction.up:
+                if (y-1 >= 0) gridArray[x][y-1].removeWall(Direction.down);
+                break;
+            case Direction.right:
+                if (x+1 < gridWidth) gridArray[x+1][y].removeWall(Direction.left);
+                break;
+            case Direction.down:
+                if (y+1 < gridHeight) gridArray[x][y+1].removeWall(Direction.up);
+                break;
+            case Direction.left:
+                if (x-1 >= 0) gridArray[x-1][y].removeWall(Direction.right);
+        }
+    }
+
     public Vec2 getScreenCoords(int screenWidth, int screenHeight, int x, int y){
         int locX = (int)(screenWidth * 0.1 + (screenWidth-(screenWidth * 0.2)) / (gridWidth) * x);
         int locY = (int)(screenHeight * 0.1 + (screenHeight-(screenHeight * 0.2)) / (gridHeight) * y);
@@ -108,6 +127,14 @@ public class Grid {
         return lines;
     }
 
+    public String getName() {
+        return gridName;
+    }
+
+    public void setGridName(String gridName) {
+        this.gridName = gridName;
+    }
+
     public int getGridWidth(){
         return gridWidth;
     }
@@ -115,5 +142,10 @@ public class Grid {
     public int getGridHeight(){
         return gridHeight;
     }
+
+    public String toString(){
+        return getName();
+    }
+
 
 }
