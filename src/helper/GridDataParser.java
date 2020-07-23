@@ -107,12 +107,13 @@ public class GridDataParser {
                         state++;
                         yCoord = Integer.parseInt(yCoordBuilder.toString());
                         yCoordBuilder.delete(0, yCoordBuilder.length());
-                        i++;
                     }
                     break;
                 case 7:
                     for(int j = 0; j < 4; j++){
-                        if(line.charAt(i) == '1') grid.addWall(xCoord,yCoord,j);
+                        if(line.charAt(i) == '1') {
+                            grid.addWall(xCoord,yCoord,j);
+                        }
                         if(j!=3) i+=2;
                     }
                     state = 4;

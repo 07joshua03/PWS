@@ -40,24 +40,6 @@ public class Grid {
         }
     }
 
-//    public Grid(int gridWidth, int gridHeight, Room[][] ra){    //(0,0) at top-left
-//        this.gridWidth = gridWidth;
-//        this.gridHeight = gridHeight;
-//        this.gridArray = ra;
-//        gridArray = new Room[gridWidth][gridHeight];
-//        for(int i = 0; i < gridWidth; i++){
-//            for(int j = 0; j < gridHeight; j++){
-//                gridArray[i][j] = new Room();
-//
-//                //Creating border walls
-//                if(i==0) gridArray[i][j].addWall(Direction.left);
-//                if(i==gridWidth-1) gridArray[i][j].addWall(Direction.right);
-//                if(j==0) gridArray[i][j].addWall(Direction.up);
-//                if(j==gridHeight-1) gridArray[i][j].addWall(Direction.down);
-//            }
-//        }
-//    }
-
     public Room getRoom(int x,int y){
         return gridArray[x][y];
     }
@@ -121,6 +103,28 @@ public class Grid {
                 if(getRoom(i,j).getWall(Direction.up)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i + 1,j)));
                 if(getRoom(i,j).getWall(Direction.right)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i+1,j), getScreenCoords(screenWidth, screenHeight, i + 1,j + 1)));
                 if(getRoom(i,j).getWall(Direction.down)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j+1), getScreenCoords(screenWidth, screenHeight, i + 1,j+1)));
+                if(getRoom(i,j).getWall(Direction.left)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i,j + 1)));
+            }
+        }
+        return lines;
+    }
+
+    public ArrayList<Line> getGridHorWallLines(int screenWidth, int screenHeight){
+        ArrayList<Line> lines = new ArrayList<>();
+        for(int i = 0; i < gridWidth; i++){
+            for (int j = 0; j < gridHeight; j++){
+                if(getRoom(i,j).getWall(Direction.up)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i + 1,j)));
+                if(getRoom(i,j).getWall(Direction.down)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j+1), getScreenCoords(screenWidth, screenHeight, i + 1,j+1)));
+            }
+        }
+        return lines;
+    }
+
+    public ArrayList<Line> getGridVerWallLines(int screenWidth, int screenHeight){
+        ArrayList<Line> lines = new ArrayList<>();
+        for(int i = 0; i < gridWidth; i++){
+            for (int j = 0; j < gridHeight; j++){
+                if(getRoom(i,j).getWall(Direction.right)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i+1,j), getScreenCoords(screenWidth, screenHeight, i + 1,j + 1)));
                 if(getRoom(i,j).getWall(Direction.left)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i,j + 1)));
             }
         }

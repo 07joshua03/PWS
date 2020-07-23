@@ -4,6 +4,8 @@ import config.ConfigWindow;
 import grid.Grid;
 import helper.Direction;
 import helper.GridDataParser;
+import helper.Vec2;
+import robot.Robot;
 
 import java.io.IOException;
 
@@ -14,17 +16,23 @@ public class Main {
     public static Grid grid;
 
     public static void main(String[] args){
-        mainWindow = new MainWindow(1000,1025);
-        ConfigWindow configWindow = new ConfigWindow(200,400);
-        grid = new Grid("Test0", 5,5);
-        //drawCLI(grid);
-        mainWindow.update(grid);
         try{
-            //GridDataParser.writeGridToSave(grid, 2);
-            drawCLI(GridDataParser.readGridFromSave(2));
+            grid = GridDataParser.readGridFromSave(5);
         } catch(IOException e){
             e.printStackTrace();
         }
+        Robot robot = new Robot(new Vec2(0,0), new Vec2( 4,4), grid.getGridWidth(), grid.getGridHeight());
+        robot.setSeenGrid(grid);
+        robot.floodfill();
+        drawCLI(grid);
+        initGUI();
+
+    }
+
+    public static void initGUI(){
+        mainWindow = new MainWindow(1000,1025);
+        ConfigWindow configWindow = new ConfigWindow(200,400);
+        mainWindow.update(grid);
     }
 
     public static void drawCLI(Grid grid){

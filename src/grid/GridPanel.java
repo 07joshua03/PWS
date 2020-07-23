@@ -16,6 +16,9 @@ public class GridPanel extends JPanel {
 
     private ArrayList<Vec2> circles;
     private ArrayList<Line> walls;
+    private ArrayList<Line> horWalls;
+    private ArrayList<Line> verWalls;
+
     private final int width;
     private final int height;
 
@@ -32,6 +35,8 @@ public class GridPanel extends JPanel {
         this.setBackground(new Color(255,255,255));
         circles = new ArrayList<>();
         walls = new ArrayList<>();
+        horWalls = new ArrayList<>();
+        verWalls = new ArrayList<>();
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -110,18 +115,29 @@ public class GridPanel extends JPanel {
     public void updateGrid(Grid grid){
         circles = grid.getGridCornerVecs(width, height);
         walls = grid.getGridWallLines(width, height);
+        horWalls = grid.getGridHorWallLines(width, height);
+        verWalls = grid.getGridVerWallLines(width, height);
         repaint();
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        g.setColor(new Color(0,0,0));
+        g.setColor(new Color(2, 6, 50, 255));
+        for (Line wall: horWalls) {
+            g.fillRect(wall.point1.x, wall.point1.y -1, wall.point2.x - wall.point1.x, 3);
+        }
+        for (Line wall: verWalls) {
+            g.fillRect(wall.point1.x -1, wall.point1.y , 3, wall.point2.y - wall.point1.y);
+        }
+
+        g.setColor(new Color(7, 49, 42));
         for (Vec2 coords: circles) {
-            g.fillOval(coords.x - 5, coords.y - 5, 10,10);
+            g.fillOval(coords.x - 4, coords.y - 4, 8,8);
         }
-        for (Line wall: walls) {
-            g.drawLine(wall.point1.x, wall.point1.y, wall.point2.x, wall.point2.y);
-        }
+//        int[] xs = {100,300,200};
+//        int[] ys = {100,100,400};     polygons for robot triangle(for measurements)
+//        g.fillPolygon(xs, ys, 3);
+
     }
 }

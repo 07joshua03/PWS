@@ -22,6 +22,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
     private final JComboBox gridsList;
     private ArrayList<Grid> gridsFromSave;
     private final JButton saveGridButton;
+    private final JTextField saveNameField;
 
     public ConfigWindow(int width, int height){
         setLayout(null);
@@ -60,10 +61,15 @@ public class ConfigWindow extends JFrame implements ActionListener {
         gridsList.setSize(165,30);
         gridsList.setLocation(10,150);
 
-        saveGridButton = new JButton("Save current grid");
+        saveNameField = new JTextField();
+        saveNameField.setSize(100,20);
+        saveNameField.setLocation(10, 200);
+        saveNameField.setColumns(1);
+
+        saveGridButton = new JButton("Save");
         saveGridButton.addActionListener(this);
-        saveGridButton.setSize(165,20);
-        saveGridButton.setLocation(10, 200);
+        saveGridButton.setSize(65,20);
+        saveGridButton.setLocation(115, 200);
 
         for (Grid g: gridsFromSave) gridsList.addItem(g);
         gridsList.addActionListener(this);
@@ -74,6 +80,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
         add(sliderHeight);
         add(changeGridButton);
         add(gridsList);
+        add(saveNameField);
         add(saveGridButton);
         this.setVisible(true);
     }
@@ -91,12 +98,15 @@ public class ConfigWindow extends JFrame implements ActionListener {
         }else if(e.getSource() == gridsList){
             Main.grid = gridsFromSave.get(gridsList.getSelectedIndex());
             Main.mainWindow.update(Main.grid);
+            Main.drawCLI(Main.grid);
         }else if(e.getSource() == saveGridButton){
             try {
-                Main.grid.setGridName("Test" + gridsFromSave.size());
-                GridDataParser.writeGridToSave(Main.grid, gridsFromSave.size());
+                Grid gridToSave = Main.grid;
+                gridToSave.setGridName(saveNameField.getText());
+                GridDataParser.writeGridToSave(gridToSave, gridsFromSave.size());
                 gridsFromSave = GridDataParser.readAllGridsFromSave();
-                gridsList.addItem(gridsFromSave.get(gridsFromSave.size()-1));
+                gridsList.removeAll();
+                for (Grid g: gridsFromSave) gridsList.addItem(g);
             }catch(IOException ex){
                 ex.printStackTrace();
             }
