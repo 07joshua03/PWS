@@ -4,6 +4,7 @@ import helper.Direction;
 import helper.Line;
 import helper.Vec2;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Grid {
@@ -84,6 +85,12 @@ public class Grid {
         return new Vec2(locX, locY);
     }
 
+    public Vec2 getRoomCenterCoords(int screenWidth, int screenHeight, int x, int y){
+        int locX = (int)(screenWidth * 0.15 + (screenWidth-(screenWidth * 0.3)) / (gridWidth - 1) * x);
+        int locY = (int)(screenHeight * 0.15 + (screenHeight-(screenHeight * 0.3)) / (gridHeight - 1) * y);
+        return new Vec2(locX, locY);
+    }
+
     public ArrayList<Vec2> getGridCornerVecs(int screenWidth, int screenHeight){
         ArrayList<Vec2> circles = new ArrayList<>();
         for(int i = 0; i <= gridWidth; i++){
@@ -151,5 +158,22 @@ public class Grid {
         return getName();
     }
 
+    public void draw(Graphics g, int width, int height){
+        //DRAW HORIZONTAL WALLS
+        g.setColor(new Color(2, 6, 50, 255));
+        for (Line wall: getGridHorWallLines(width, height)) {
+            g.fillRect(wall.point1.x, wall.point1.y -1, wall.point2.x - wall.point1.x, 3);
+        }
+        //DRAW VERTICAL WALLS
+        for (Line wall: getGridVerWallLines(width, height)) {
+            g.fillRect(wall.point1.x -1, wall.point1.y , 3, wall.point2.y - wall.point1.y);
+        }
+
+        //DRAW WALL CORNERS
+        g.setColor(new Color(7, 49, 42));
+        for (Vec2 coords: getGridCornerVecs(width, height)) {
+            g.fillOval(coords.x - 4, coords.y - 4, 8,8);
+        }
+    }
 
 }

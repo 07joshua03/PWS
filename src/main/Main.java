@@ -14,6 +14,7 @@ public class Main {
     public static boolean stopLoop = false;
     public static MainWindow mainWindow;
     public static Grid grid;
+    public static Robot robot;
 
     public static void main(String[] args){
         try{
@@ -21,12 +22,23 @@ public class Main {
         } catch(IOException e){
             e.printStackTrace();
         }
-        Robot robot = new Robot(new Vec2(0,0), new Vec2( 4,4), grid.getGridWidth(), grid.getGridHeight());
-        robot.setSeenGrid(grid);
-        robot.floodfill();
-        drawCLI(grid);
+
         initGUI();
 
+        solve();
+
+
+    }
+
+    public static void solve(){
+        robot = new Robot(new Vec2(0,0), new Vec2( 4,0), grid.getGridWidth(), grid.getGridHeight());
+        robot.setSeenGrid(grid);
+
+        while(!robot.isGoalReached()){
+            robot.update();
+            robot.drawCLIFloodfill();
+            mainWindow.update(grid);
+        }
     }
 
     public static void initGUI(){

@@ -98,7 +98,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
         }else if(e.getSource() == gridsList){
             Main.grid = gridsFromSave.get(gridsList.getSelectedIndex());
             Main.mainWindow.update(Main.grid);
-            Main.drawCLI(Main.grid);
+            Main.solve();
         }else if(e.getSource() == saveGridButton){
             try {
                 Grid gridToSave = Main.grid;
