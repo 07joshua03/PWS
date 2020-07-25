@@ -184,8 +184,7 @@ public class Robot extends DrawableObject {
         if(location.x == goalLocation.x && location.y == goalLocation.y){
             pastLocations.add(location);
             return true;
-        }else if (d2Goal[location.x][location.y] == -1) return true;
-        else return false;
+        }else return d2Goal[location.x][location.y] == -1;
     }
 
     public void draw(Graphics g, int width, int height){

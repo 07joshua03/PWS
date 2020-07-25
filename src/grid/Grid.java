@@ -70,16 +70,16 @@ public class Grid extends DrawableObject {
             gridArray[x][y].removeWall(direction);
             switch (direction) {
                 case Direction.up:
-                    if (y - 1 >= 0) gridArray[x][y - 1].removeWall(Direction.down);
+                    gridArray[x][y - 1].removeWall(Direction.down);
                     break;
                 case Direction.right:
-                    if (x + 1 < gridWidth) gridArray[x + 1][y].removeWall(Direction.left);
+                    gridArray[x + 1][y].removeWall(Direction.left);
                     break;
                 case Direction.down:
-                    if (y + 1 < gridHeight) gridArray[x][y + 1].removeWall(Direction.up);
+                    gridArray[x][y + 1].removeWall(Direction.up);
                     break;
                 case Direction.left:
-                    if (x - 1 >= 0) gridArray[x - 1][y].removeWall(Direction.right);
+                    gridArray[x - 1][y].removeWall(Direction.right);
             }
         }
     }
@@ -110,19 +110,6 @@ public class Grid extends DrawableObject {
         return circles;
 
 
-    }
-
-    public ArrayList<Line> getGridWallLines(int screenWidth, int screenHeight){
-        ArrayList<Line> lines = new ArrayList<>();
-        for(int i = 0; i < gridWidth; i++){
-            for (int j = 0; j < gridHeight; j++){
-                if(getRoom(i,j).getWall(Direction.up)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i + 1,j)));
-                if(getRoom(i,j).getWall(Direction.right)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i+1,j), getScreenCoords(screenWidth, screenHeight, i + 1,j + 1)));
-                if(getRoom(i,j).getWall(Direction.down)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j+1), getScreenCoords(screenWidth, screenHeight, i + 1,j+1)));
-                if(getRoom(i,j).getWall(Direction.left)) lines.add(new Line(getScreenCoords(screenWidth, screenHeight, i,j), getScreenCoords(screenWidth, screenHeight, i,j + 1)));
-            }
-        }
-        return lines;
     }
 
     public ArrayList<Line> getGridHorWallLines(int screenWidth, int screenHeight){

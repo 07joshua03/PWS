@@ -19,11 +19,13 @@ public class Main {
     public static void main(String[] args){
         try{
             grid = GridDataParser.readGridFromSave(0);
+            drawCLI(grid);
         } catch(IOException e){
             e.printStackTrace();
         }
         robot = new Robot(new Vec2(0,0), new Vec2( 4,0), grid.getGridWidth(), grid.getGridHeight());
         solve();
+        robot.drawCLIFloodfill();
         initGUI();
         mainWindow.update();
         //mainWindow.mainPanel.drawableObjects.add(grid);

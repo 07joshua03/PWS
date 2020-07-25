@@ -19,13 +19,11 @@ public class ConfigWindow extends JFrame implements ActionListener {
     private final JLabel sliderWidthText;
     private final JLabel sliderHeightText;
     private final JButton changeGridButton;
-    private final JLabel saveListText;
-    private final JComboBox gridsList;
+    private final JComboBox<Grid> gridsList;
     private ArrayList<Grid> gridsFromSave;
     private final JButton saveGridButton;
     private final JTextField saveNameField;
-    private final JLabel modeText;
-    private final JComboBox modeList;
+    private final JComboBox<String> modeList;
     public int mode;
 
     public ConfigWindow(int width, int height){
@@ -64,11 +62,11 @@ public class ConfigWindow extends JFrame implements ActionListener {
         changeGridButton.setForeground(new Color(0,0,0));
         changeGridButton.setBackground(new Color(255,255,255));
 
-        saveListText = new JLabel("Save file:");
+        JLabel saveListText = new JLabel("Save file:");
         saveListText.setSize(165, 20);
         saveListText.setLocation(10,135);
 
-        gridsList = new JComboBox();
+        gridsList = new JComboBox<>();
         gridsList.setSize(175,30);
         gridsList.setLocation(10,155);
         for (Grid g: gridsFromSave) gridsList.addItem(g);
@@ -89,11 +87,11 @@ public class ConfigWindow extends JFrame implements ActionListener {
         saveGridButton.setForeground(new Color(0,0,0));
         saveGridButton.setBackground(new Color(255,255,255));
 
-        modeText = new JLabel("Mode selection:");
+        JLabel modeText = new JLabel("Mode selection:");
         modeText.setSize(165, 20);
         modeText.setLocation(10,220);
 
-        modeList = new JComboBox();
+        modeList = new JComboBox<>();
         modeList.setLocation(10,240);
         modeList.setSize(175,30);
         modeList.addActionListener(this);
