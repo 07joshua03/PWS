@@ -4,15 +4,14 @@ import grid.Grid;
 import grid.GridPanel;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 public class MainWindow extends JFrame {
 
-    private int width;
-    private int height;
-    private GridPanel mainPanel;
+    private final int width;
+    private final int height;
+    public final GridPanel mainPanel;
 
     public MainWindow(int w, int h){
 
@@ -20,9 +19,11 @@ public class MainWindow extends JFrame {
         this.width = w;
         this.height = h;
         this.setSize(width, height);
+        this.setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
 
         //mainPanel stuff
         mainPanel = new GridPanel(width,height - 25);
@@ -31,8 +32,8 @@ public class MainWindow extends JFrame {
 
     }
 
-    public void update(Grid grid){
-        mainPanel.updateGrid(grid);
+    public void update(){
+        mainPanel.updatePanel();
     }
 
 }

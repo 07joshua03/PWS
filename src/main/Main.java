@@ -11,40 +11,43 @@ import java.io.IOException;
 
 public class Main {
 
-    public static boolean stopLoop = false;
     public static MainWindow mainWindow;
     public static Grid grid;
     public static Robot robot;
+    public static ConfigWindow configWindow;
 
     public static void main(String[] args){
         try{
-            grid = GridDataParser.readGridFromSave(5);
+            grid = GridDataParser.readGridFromSave(0);
         } catch(IOException e){
             e.printStackTrace();
         }
-
-        initGUI();
-
+        robot = new Robot(new Vec2(0,0), new Vec2( 4,0), grid.getGridWidth(), grid.getGridHeight());
         solve();
-
-
+        initGUI();
+        mainWindow.update();
+        //mainWindow.mainPanel.drawableObjects.add(grid);
     }
 
     public static void solve(){
-        robot = new Robot(new Vec2(0,0), new Vec2( 4,0), grid.getGridWidth(), grid.getGridHeight());
         robot.setSeenGrid(grid);
+        robot.reset();
 
+        //mainWindow.mainPanel.drawableObjects.add(robot);
+        robot.floodfill();
         while(!robot.isGoalReached()){
+
             robot.update();
-            robot.drawCLIFloodfill();
-            mainWindow.update(grid);
+            //robot.drawCLIFloodfill();
+
         }
     }
 
     public static void initGUI(){
+
         mainWindow = new MainWindow(1000,1025);
-        ConfigWindow configWindow = new ConfigWindow(200,400);
-        mainWindow.update(grid);
+        configWindow = new ConfigWindow(200,400);
+        configWindow.setResizable(false);
     }
 
     public static void drawCLI(Grid grid){

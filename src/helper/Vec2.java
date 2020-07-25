@@ -12,11 +12,11 @@ public class Vec2 {
         this.y = y;
     }
 
-    public boolean isIn(ArrayList<Vec2> list){
-        for (Vec2 i:list) {
-            if(this.x == i.x && this.y == i.y) return true;
+    public boolean isNotIn(ArrayList<Vec2> list){
+        for (Vec2 vector:list) {
+            if(vector.x == x && vector.y == y) return false;
         }
-        return false;
+        return true;
     }
 
 
