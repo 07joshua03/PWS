@@ -16,76 +16,68 @@ public class Main {
     public static Robot robot;
     public static ConfigWindow configWindow;
     public static Maze maze;
+    public static boolean shouldSolve = true;
+    private static double interpolation = 0;
+    private static final int FPS = 60;
+    private static final int SKIP_TICKS = 1000 / FPS;
+    private static final int MAX_FRAMESKIP = 5;
 
     public static void main(String[] args){
+        init();
+        loop();
+
+    }
+
+    public static void init(){
         try{
             maze = DataParser.readMazeFromSave(0);
-            //DataParser.writeMazeToSave(maze, 0);
-            drawCLI(maze.grid);
         } catch(IOException e){
             e.printStackTrace();
         }
         robot = new Robot(maze);
-        solve();
-        robot.drawCLIFloodfill();
-        initGUI();
-        mainWindow.update();
-        //mainWindow.mainPanel.drawableObjects.add(grid);
-    }
-
-    public static void solve(){
-        robot.setSeenGrid(maze.grid);
-        robot.startLocation = maze.startingLocation;
-        robot.goalLocation = maze.goalLocation;
-        robot.reset();
-
-        //mainWindow.mainPanel.drawableObjects.add(robot);
-        robot.floodfill();
-        while(!robot.isGoalReached()){
-
-            robot.update();
-            //robot.drawCLIFloodfill();
-
-        }
-    }
-
-    public static void initGUI(){
-
         mainWindow = new MainWindow(800,800);
         configWindow = new ConfigWindow(200,400);
         configWindow.setResizable(false);
     }
 
-    public static void drawCLI(Grid grid){
-        System.out.println();
-        for(int i = 0; i < grid.getGridHeight();i++){
-            //Upper row(s) i.e. *-* * *-*-*
-            System.out.print("*");
-            for(int j = 0; j < grid.getGridWidth(); j++){
+    public static void loop(){
+        //boolean complete = false;
+        while(true){
+            if(shouldSolve){
+                solve();
 
-                if(grid.getRoom(j,i).getWall(Direction.up)) System.out.print("---*");
-                else System.out.print("   *");
             }
-            System.out.println();
-            //Side row(s) i.e. | | | |   |
-            for(int j = 0; j < grid.getGridWidth(); j++){
-                if(grid.getRoom(j,i).getWall(Direction.left)) System.out.print("|   ");
-                else System.out.print("    ");
-                if(j == grid.getGridWidth()-1 && grid.getRoom(j,i).getWall(Direction.right)) System.out.print("|");
-            }
-
-            System.out.println();
-            //Last row i.e. *-* * *-*-*
-            if(i == grid.getGridHeight()-1){
-                System.out.print("*");
-                for(int j = 0; j < grid.getGridWidth(); j++){
-                    if(grid.getRoom(j,i).getWall(Direction.down)) System.out.print("---*");
-                    else System.out.print("   *");
-                }
-            }
-
+            render();
         }
     }
 
+    public static void solve(){
+        shouldSolve = false;
+
+        robot.totalGrid = maze.grid;
+        robot.startLocation = maze.startingLocation;
+        robot.goalLocation = maze.goalLocation;
+        robot.reset();
+        robot.floodfill();
+
+        //LOOP
+        double next_game_tick = System.currentTimeMillis();
+        int loops;
+        while(!robot.isGoalReached()){
+            loops = 0;
+            while (System.currentTimeMillis() > next_game_tick && loops < MAX_FRAMESKIP) {
+
+                robot.update();
+                next_game_tick += SKIP_TICKS;
+                loops++;
+            }
+            interpolation = (System.currentTimeMillis() + SKIP_TICKS - next_game_tick / (double) SKIP_TICKS);
+            render();
+        }
+    }
+
+    public static void render(){
+        mainWindow.mainPanel.renderPanel();
+    }
 
 }

@@ -3,6 +3,7 @@ package config;
 import grid.Grid;
 import helper.DataParser;
 import helper.Slider;
+import helper.Vec2;
 import main.Main;
 import robot.Maze;
 
@@ -126,11 +127,15 @@ public class ConfigWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == changeGridButton) {
             Main.maze.grid.changeGridSize(sliderWidth.getValue(), sliderHeight.getValue());
-            Main.mainWindow.update();
+            Main.maze = new Maze("", sliderWidth.getValue(), sliderHeight.getValue(), new Vec2(0,0), new Vec2(sliderWidth.getValue() - 1, sliderHeight.getValue() - 1));
+            Main.shouldSolve = true;
+            Main.render();
+            //Main.mainWindow.update();
         }else if(e.getSource() == mazesList){
             Main.maze = mazesFromSave.get(mazesList.getSelectedIndex());
-            Main.mainWindow.update();
-            Main.solve();
+            //Main.mainWindow.update();
+            Main.shouldSolve = true;
+            Main.render();
         }else if(e.getSource() == saveGridButton){
             try {
                 Maze mazeToSave = Main.maze;
@@ -138,6 +143,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
                 DataParser.writeMazeToSave(mazeToSave, mazesFromSave.size());
                 mazesFromSave = DataParser.readAllMazesFromSave();
                 mazesList.addItem(mazesFromSave.get(mazesFromSave.size() - 1));
+                Main.render();
             }catch(IOException ex){
                 ex.printStackTrace();
             }

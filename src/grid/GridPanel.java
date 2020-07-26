@@ -51,24 +51,24 @@ public class GridPanel extends JPanel {
                     case 0:
                         if(!Main.maze.grid.getRoom(roomChosen.x, roomChosen.y).getWall(directionChosen)) Main.maze.grid.addWall(roomChosen.x, roomChosen.y, directionChosen);
                         else Main.maze.grid.removeWall(roomChosen.x, roomChosen.y, directionChosen);
-                        Main.solve();
-                        Main.mainWindow.update();
+                        Main.shouldSolve = true;
+                        Main.render();
                         break;
                     case 1:
                         Main.robot.startLocation.x = roomChosen.x;
                         Main.robot.startLocation.y = roomChosen.y;
                         Main.maze.startingLocation.x = roomChosen.x;
                         Main.maze.startingLocation.y = roomChosen.y;
-                        Main.solve();
-                        Main.mainWindow.update();
+                        Main.shouldSolve = true;
+                        Main.render();
                         break;
                     case 2:
                         Main.robot.goalLocation.x = roomChosen.x;
                         Main.robot.goalLocation.y = roomChosen.y;
                         Main.maze.goalLocation.x = roomChosen.x;
                         Main.maze.goalLocation.y = roomChosen.y;
-                        Main.solve();
-                        Main.mainWindow.update();
+                        Main.shouldSolve = true;
+                        Main.render();
                         break;
 
                 }
@@ -85,7 +85,7 @@ public class GridPanel extends JPanel {
         });
     }
 
-    public void updatePanel(){
+    public void renderPanel(){
         repaint();
     }
 
@@ -108,8 +108,8 @@ public class GridPanel extends JPanel {
         int mouseX = 0;
         int mouseY = 0;
         try {
-            mouseX = e.getX() - 100;
-            mouseY = e.getY() - 100;
+            mouseX = (int)(e.getX() - (0.1*width));
+            mouseY = (int)(e.getY() - (0.1*height));
         }catch(Exception ex){
             System.out.println("WARN: Mouse coord not found");
         }
@@ -123,6 +123,7 @@ public class GridPanel extends JPanel {
         if(y > Main.maze.grid.getGridHeight() - 1) y = Main.maze.grid.getGridHeight() - 1;
         roomChosen.x = x;
         roomChosen.y = y;
+
     }
 
     private void calcDirection(MouseEvent e){
@@ -141,16 +142,16 @@ public class GridPanel extends JPanel {
             System.out.println("WARN: Mouse coord not found");
         }
 
-        int roomWidth = (int)((width - (width*0.2))/Main.maze.grid.getGridWidth());
-        int roomHeight = (int)((width - (width*0.2))/Main.maze.grid.getGridWidth());
-        int x3 = ((roomHeight/roomWidth)*x2);
-        if(y2<x3 && y2<roomWidth-x3){
+        double roomWidth = ((width - (width*0.2))/Main.maze.grid.getGridWidth());
+        double roomHeight = ((height - (height*0.2))/Main.maze.grid.getGridHeight());
+        double dy = ((roomHeight/roomWidth)*x2);
+        if(y2<dy && y2<roomHeight-dy){
             directionChosen = Direction.up;
-        }else if(y2>=x3 && y2<roomWidth-x3){
+        }else if(y2>=dy && y2<roomHeight-dy){
             directionChosen = Direction.left;
-        }else if (y2<x3 && y2>=roomWidth-x3){
+        }else if (y2<dy && y2>=roomHeight-dy){
             directionChosen = Direction.right;
-        }else{
+        }else if (y2>=dy && y2>=roomHeight-dy){
             directionChosen = Direction.down;
         }
     }

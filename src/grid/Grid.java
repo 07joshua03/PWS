@@ -189,4 +189,35 @@ public class Grid extends DrawableObject {
         }
     }
 
+    public void drawCLI(){
+        System.out.println();
+        for(int i = 0; i < getGridHeight();i++){
+            //Upper row(s) i.e. *-* * *-*-*
+            System.out.print("*");
+            for(int j = 0; j < getGridWidth(); j++){
+
+                if(getRoom(j,i).getWall(Direction.up)) System.out.print("---*");
+                else System.out.print("   *");
+            }
+            System.out.println();
+            //Side row(s) i.e. | | | |   |
+            for(int j = 0; j < getGridWidth(); j++){
+                if(getRoom(j,i).getWall(Direction.left)) System.out.print("|   ");
+                else System.out.print("    ");
+                if(j == getGridWidth()-1 && getRoom(j,i).getWall(Direction.right)) System.out.print("|");
+            }
+
+            System.out.println();
+            //Last row i.e. *-* * *-*-*
+            if(i == getGridHeight()-1){
+                System.out.print("*");
+                for(int j = 0; j < getGridWidth(); j++){
+                    if(getRoom(j,i).getWall(Direction.down)) System.out.print("---*");
+                    else System.out.print("   *");
+                }
+            }
+
+        }
+    }
+
 }

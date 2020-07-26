@@ -25,8 +25,4 @@ public class MainWindow extends JFrame {
 
     }
 
-    public void update(){
-        mainPanel.updatePanel();
-    }
-
 }
