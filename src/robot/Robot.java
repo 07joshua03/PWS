@@ -19,12 +19,12 @@ public class Robot extends DrawableObject {
     public ArrayList<Vec2> pastLocations;
     public int[][] d2Goal;
 
-    public Robot(Vec2 startingLoc, Vec2 goalLoc, int gridWidth, int gridHeight){
-        startLocation = startingLoc;
-        goalLocation = goalLoc;
+    public Robot(Maze maze){
+        startLocation = maze.startingLocation;
+        goalLocation = maze.goalLocation;
         location = new Vec2(0,0);
-        seenGrid = new Grid("cum" ,gridWidth, gridHeight);
-        d2Goal = new int[gridWidth][gridHeight];
+        seenGrid = new Grid("cum" ,maze.grid.getGridWidth(), maze.grid.getGridHeight());
+        d2Goal = new int[maze.grid.getGridWidth()][maze.grid.getGridHeight()];
         reset();
     }
 

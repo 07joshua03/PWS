@@ -49,20 +49,24 @@ public class GridPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 switch (Main.configWindow.mode){
                     case 0:
-                        if(!Main.grid.getRoom(roomChosen.x, roomChosen.y).getWall(directionChosen)) Main.grid.addWall(roomChosen.x, roomChosen.y, directionChosen);
-                        else Main.grid.removeWall(roomChosen.x, roomChosen.y, directionChosen);
+                        if(!Main.maze.grid.getRoom(roomChosen.x, roomChosen.y).getWall(directionChosen)) Main.maze.grid.addWall(roomChosen.x, roomChosen.y, directionChosen);
+                        else Main.maze.grid.removeWall(roomChosen.x, roomChosen.y, directionChosen);
                         Main.solve();
                         Main.mainWindow.update();
                         break;
                     case 1:
                         Main.robot.startLocation.x = roomChosen.x;
                         Main.robot.startLocation.y = roomChosen.y;
+                        Main.maze.startingLocation.x = roomChosen.x;
+                        Main.maze.startingLocation.y = roomChosen.y;
                         Main.solve();
                         Main.mainWindow.update();
                         break;
                     case 2:
                         Main.robot.goalLocation.x = roomChosen.x;
                         Main.robot.goalLocation.y = roomChosen.y;
+                        Main.maze.goalLocation.x = roomChosen.x;
+                        Main.maze.goalLocation.y = roomChosen.y;
                         Main.solve();
                         Main.mainWindow.update();
                         break;
@@ -91,7 +95,7 @@ public class GridPanel extends JPanel {
 //            o.draw(g, width, height);
 //        }
 
-        Main.grid.draw(g, width, height);
+        Main.maze.grid.draw(g, width, height);
         Main.robot.draw(g, width ,height);
 
 //        int[] xs = {100,300,200};
@@ -113,17 +117,17 @@ public class GridPanel extends JPanel {
         else if(mouseX > width- (int)(width * 0.2)) mouseX = (int)(width - (width * 0.2));
         if(mouseY < 0) mouseY = 0;
         else if(mouseY > height - (int)(height * 0.2)) mouseY = (int)(height - (height * 0.2));
-        int x = (int)(mouseX / (width - (width * 0.2)) * (Main.grid.getGridWidth()));
-        int y = (int)(mouseY / (height - (height * 0.2)) * (Main.grid.getGridHeight()));
-        if(x > Main.grid.getGridWidth() - 1) x = Main.grid.getGridWidth() - 1;
-        if(y > Main.grid.getGridHeight() - 1) y = Main.grid.getGridHeight() - 1;
+        int x = (int)(mouseX / (width - (width * 0.2)) * (Main.maze.grid.getGridWidth()));
+        int y = (int)(mouseY / (height - (height * 0.2)) * (Main.maze.grid.getGridHeight()));
+        if(x > Main.maze.grid.getGridWidth() - 1) x = Main.maze.grid.getGridWidth() - 1;
+        if(y > Main.maze.grid.getGridHeight() - 1) y = Main.maze.grid.getGridHeight() - 1;
         roomChosen.x = x;
         roomChosen.y = y;
     }
 
     private void calcDirection(MouseEvent e){
-        Vec2 topLeft = Main.grid.getScreenCoords(width,height, roomChosen.x, roomChosen.y);
-        Vec2 botRight = Main.grid.getScreenCoords(width,height, roomChosen.x + 1, roomChosen.y + 1);
+        Vec2 topLeft = Main.maze.grid.getScreenCoords(width,height, roomChosen.x, roomChosen.y);
+        Vec2 botRight = Main.maze.grid.getScreenCoords(width,height, roomChosen.x + 1, roomChosen.y + 1);
         int x2 = 0;
         int y2 = 0;
         try{
@@ -137,8 +141,8 @@ public class GridPanel extends JPanel {
             System.out.println("WARN: Mouse coord not found");
         }
 
-        int roomWidth = (int)((width - (width*0.2))/Main.grid.getGridWidth());
-        int roomHeight = (int)((width - (width*0.2))/Main.grid.getGridWidth());
+        int roomWidth = (int)((width - (width*0.2))/Main.maze.grid.getGridWidth());
+        int roomHeight = (int)((width - (width*0.2))/Main.maze.grid.getGridWidth());
         int x3 = ((roomHeight/roomWidth)*x2);
         if(y2<x3 && y2<roomWidth-x3){
             directionChosen = Direction.up;

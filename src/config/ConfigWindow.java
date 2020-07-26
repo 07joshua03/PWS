@@ -1,9 +1,10 @@
 package config;
 
 import grid.Grid;
-import helper.GridDataParser;
+import helper.DataParser;
 import helper.Slider;
 import main.Main;
+import robot.Maze;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,8 +20,8 @@ public class ConfigWindow extends JFrame implements ActionListener {
     private final JLabel sliderWidthText;
     private final JLabel sliderHeightText;
     private final JButton changeGridButton;
-    private final JComboBox<Grid> gridsList;
-    private ArrayList<Grid> gridsFromSave;
+    private final JComboBox<Maze> mazesList;
+    private ArrayList<Maze> mazesFromSave;
     private final JButton saveGridButton;
     private final JTextField saveNameField;
     private final JComboBox<String> modeList;
@@ -34,9 +35,9 @@ public class ConfigWindow extends JFrame implements ActionListener {
         this.setLocation(Main.mainWindow.getLocation().x - width, Main.mainWindow.getLocation().y);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        gridsFromSave = new ArrayList<>();
+        mazesFromSave = new ArrayList<>();
         try {
-            gridsFromSave = GridDataParser.readAllGridsFromSave();
+            mazesFromSave = DataParser.readAllMazesFromSave();
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -66,14 +67,14 @@ public class ConfigWindow extends JFrame implements ActionListener {
         saveListText.setSize(165, 20);
         saveListText.setLocation(10,135);
 
-        gridsList = new JComboBox<>();
-        gridsList.setSize(175,30);
-        gridsList.setLocation(10,155);
-        for (Grid g: gridsFromSave) gridsList.addItem(g);
-        gridsList.addActionListener(this);
-        gridsList.setForeground(new Color(0,0,0));
-        gridsList.setBackground(new Color(255,255,255));
-        gridsList.setFocusable(false);
+        mazesList = new JComboBox<>();
+        mazesList.setSize(175,30);
+        mazesList.setLocation(10,155);
+        for (Maze maze: mazesFromSave) mazesList.addItem(maze);
+        mazesList.addActionListener(this);
+        mazesList.setForeground(new Color(0,0,0));
+        mazesList.setBackground(new Color(255,255,255));
+        mazesList.setFocusable(false);
 
         saveNameField = new JTextField();
         saveNameField.setSize(105,25);
@@ -108,7 +109,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
         add(sliderHeight);
         add(changeGridButton);
         add(saveListText);
-        add(gridsList);
+        add(mazesList);
         add(saveNameField);
         add(saveGridButton);
         add(modeText);
@@ -124,20 +125,19 @@ public class ConfigWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == changeGridButton) {
-            Main.grid.changeGridSize(sliderWidth.getValue(), sliderHeight.getValue());
+            Main.maze.grid.changeGridSize(sliderWidth.getValue(), sliderHeight.getValue());
             Main.mainWindow.update();
-        }else if(e.getSource() == gridsList){
-            Main.grid = gridsFromSave.get(gridsList.getSelectedIndex());
+        }else if(e.getSource() == mazesList){
+            Main.maze = mazesFromSave.get(mazesList.getSelectedIndex());
             Main.mainWindow.update();
             Main.solve();
         }else if(e.getSource() == saveGridButton){
             try {
-                Grid gridToSave = Main.grid;
-                gridToSave.setGridName(saveNameField.getText());
-                GridDataParser.writeGridToSave(gridToSave, gridsFromSave.size());
-                gridsFromSave = GridDataParser.readAllGridsFromSave();
-                gridsList.removeAll();
-                for (Grid g: gridsFromSave) gridsList.addItem(g);
+                Maze mazeToSave = Main.maze;
+                mazeToSave.grid.setGridName(saveNameField.getText());
+                DataParser.writeMazeToSave(mazeToSave, mazesFromSave.size());
+                mazesFromSave = DataParser.readAllMazesFromSave();
+                mazesList.addItem(mazesFromSave.get(mazesFromSave.size() - 1));
             }catch(IOException ex){
                 ex.printStackTrace();
             }
