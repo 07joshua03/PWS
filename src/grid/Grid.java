@@ -4,6 +4,7 @@ import helper.Direction;
 import helper.DrawableObject;
 import helper.Line;
 import helper.Vec2;
+import main.Main;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,6 +44,19 @@ public class Grid extends DrawableObject {
 
     public Room getRoom(int x,int y){
         return gridArray[x][y];
+    }
+
+    public Vec2 getNeighbourVec(int x, int y, int direction){
+        switch (direction){
+            case Direction.up:
+                return new Vec2(x, y - 1);
+            case Direction.right:
+                return new Vec2(x + 1, y);
+            case Direction.down:
+                return new Vec2(x, y + 1);
+            default:
+                return new Vec2(x - 1, y);
+        }
     }
 
     public void addWall(int x,int y, int direction){
@@ -154,32 +168,34 @@ public class Grid extends DrawableObject {
         return getName();
     }
 
-    public void draw(Graphics g, int width, int height){
-        Vec2 point1 = getScreenCoords(width,height,0,0);
-        Vec2 point2 = getScreenCoords(width,height,gridWidth,gridHeight);
+    public void draw(Graphics g, int width, int height) {
+        Vec2 point1 = getScreenCoords(width, height, 0, 0);
+        Vec2 point2 = getScreenCoords(width, height, gridWidth, gridHeight);
         g.setColor(new Color(60, 64, 66));
         g.fillRect(point1.x, point1.y, point2.x - point1.x, point2.y - point1.y);
 
         g.setColor(new Color(96, 99, 104));
-        for(int y = 1; y < gridHeight; y++){
-            point1 = getScreenCoords(width,height,0,y);
-            point2 = getScreenCoords(width,height,gridWidth,y);
+        for (int y = 1; y < gridHeight; y++) {
+            point1 = getScreenCoords(width, height, 0, y);
+            point2 = getScreenCoords(width, height, gridWidth, y);
             g.drawLine(point1.x, point1.y, point2.x, point2.y);
         }
-        for(int x = 1; x < gridWidth; x++){
-            point1 = getScreenCoords(width,height,x,0);
-            point2 = getScreenCoords(width,height,x,gridHeight);
+        for (int x = 1; x < gridWidth; x++) {
+            point1 = getScreenCoords(width, height, x, 0);
+            point2 = getScreenCoords(width, height, x, gridHeight);
             g.drawLine(point1.x, point1.y, point2.x, point2.y);
         }
 
-        //DRAW HORIZONTAL WALLS
-        g.setColor(new Color(255, 178, 255));
-        for (Line wall: getGridHorWallLines(width, height)) {
-            g.fillRect(wall.point1.x, wall.point1.y -1, wall.point2.x - wall.point1.x, 3);
-        }
-        //DRAW VERTICAL WALLS
-        for (Line wall: getGridVerWallLines(width, height)) {
-            g.fillRect(wall.point1.x -1, wall.point1.y , 3, wall.point2.y - wall.point1.y);
+        if (Main.configWindow.totalGridVisible) {
+            //DRAW HORIZONTAL WALLS
+            g.setColor(new Color(255, 178, 255));
+            for (Line wall : getGridHorWallLines(width, height)) {
+                g.fillRect(wall.point1.x, wall.point1.y - 1, wall.point2.x - wall.point1.x, 3);
+            }
+            //DRAW VERTICAL WALLS
+            for (Line wall : getGridVerWallLines(width, height)) {
+                g.fillRect(wall.point1.x - 1, wall.point1.y, 3, wall.point2.y - wall.point1.y);
+            }
         }
 
         //DRAW WALL CORNERS

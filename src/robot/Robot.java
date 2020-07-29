@@ -5,6 +5,7 @@ import helper.Direction;
 import helper.DrawableObject;
 import helper.Line;
 import helper.Vec2;
+import main.Main;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -195,6 +196,7 @@ public class Robot extends DrawableObject {
                 seenGrid.addWall(location.x, location.y, i);
             }
         }
+        direction = 4;
         switch (direction){
             case Direction.up:
                 if(!seenGrid.getRoom(location.x, location.y).getWall(Direction.up)){
@@ -232,12 +234,43 @@ public class Robot extends DrawableObject {
                     }
                 }
                 break;
+            case 4:
+                if(!seenGrid.getRoom(location.x, location.y).getWall(Direction.up)){
+                    for(int i = 0; i < 4; i++){
+                        if(totalGrid.getRoom(location.x, location.y-1).getWall(i) && !seenGrid.getRoom(location.x, location.y-1).getWall(i)){
+                            seenGrid.addWall(location.x, location.y-1, i);
+                        }
+                    }
+                }
+                if(!seenGrid.getRoom(location.x, location.y).getWall(Direction.right)){
+                    for(int i = 0; i < 4; i++){
+                        if(totalGrid.getRoom(location.x + 1, location.y).getWall(i) && !seenGrid.getRoom(location.x + 1, location.y).getWall(i)){
+                            seenGrid.addWall(location.x + 1, location.y, i);
+                        }
+                    }
+                }
+                if(!seenGrid.getRoom(location.x, location.y).getWall(Direction.down)){
+                    for(int i = 0; i < 4; i++){
+                        if(totalGrid.getRoom(location.x, location.y+1).getWall(i) && !seenGrid.getRoom(location.x, location.y+1).getWall(i)){
+                            seenGrid.addWall(location.x, location.y+1, i);
+                        }
+                    }
+                }
+                if(!seenGrid.getRoom(location.x, location.y).getWall(Direction.left)){
+                    for(int i = 0; i < 4; i++){
+                        if(totalGrid.getRoom(location.x - 1, location.y).getWall(i) && !seenGrid.getRoom(location.x - 1, location.y).getWall(i)){
+                            seenGrid.addWall(location.x - 1, location.y, i);
+                        }
+                    }
+                }
+                break;
+
         }
     }
 
-    public void setSeenGrid(Grid grid){
-        seenGrid = grid;
-    }
+//    public void setSeenGrid(Grid grid){
+//        seenGrid = grid;
+//    }
 
     public boolean isGoalReached(){
         if(location.x == goalLocation.x && location.y == goalLocation.y){
@@ -248,13 +281,15 @@ public class Robot extends DrawableObject {
 
     public void draw(Graphics g, int width, int height){
 
-        g.setColor(new Color(161, 255, 138));
-        for (Line wall: seenGrid.getGridHorWallLines(width, height)) {
-            g.fillRect(wall.point1.x, wall.point1.y -1, wall.point2.x - wall.point1.x, 3);
-        }
-        //DRAW VERTICAL WALLS
-        for (Line wall: seenGrid.getGridVerWallLines(width, height)) {
-            g.fillRect(wall.point1.x -1, wall.point1.y , 3, wall.point2.y - wall.point1.y);
+        if(Main.configWindow.seenGridVisible) {
+            g.setColor(new Color(161, 255, 138));
+            for (Line wall : seenGrid.getGridHorWallLines(width, height)) {
+                g.fillRect(wall.point1.x, wall.point1.y - 1, wall.point2.x - wall.point1.x, 3);
+            }
+            //DRAW VERTICAL WALLS
+            for (Line wall : seenGrid.getGridVerWallLines(width, height)) {
+                g.fillRect(wall.point1.x - 1, wall.point1.y, 3, wall.point2.y - wall.point1.y);
+            }
         }
 
         //Draw past positions/lines

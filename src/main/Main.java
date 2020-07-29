@@ -1,10 +1,7 @@
 package main;
 
 import config.ConfigWindow;
-import grid.Grid;
-import helper.Direction;
 import helper.DataParser;
-import helper.Vec2;
 import robot.Maze;
 import robot.Robot;
 
@@ -17,7 +14,6 @@ public class Main {
     public static ConfigWindow configWindow;
     public static Maze maze;
     public static boolean shouldSolve = true;
-    private static double interpolation = 0;
     private static final int FPS = 60;
     private static final int SKIP_TICKS = 1000 / FPS;
     private static final int MAX_FRAMESKIP = 5;
@@ -25,7 +21,6 @@ public class Main {
     public static void main(String[] args){
         init();
         loop();
-
     }
 
     public static void init(){
@@ -35,9 +30,10 @@ public class Main {
             e.printStackTrace();
         }
         robot = new Robot(maze);
-        mainWindow = new MainWindow(800,800);
         configWindow = new ConfigWindow(200,400);
         configWindow.setResizable(false);
+        mainWindow = new MainWindow(800,800);
+
     }
 
     public static void loop(){
@@ -45,7 +41,6 @@ public class Main {
         while(true){
             if(shouldSolve){
                 solve();
-
             }
             render();
         }
@@ -71,7 +66,7 @@ public class Main {
                 next_game_tick += SKIP_TICKS;
                 loops++;
             }
-            interpolation = (System.currentTimeMillis() + SKIP_TICKS - next_game_tick / (double) SKIP_TICKS);
+            //double interpolation = (System.currentTimeMillis() + SKIP_TICKS - next_game_tick / (double) SKIP_TICKS);
             render();
         }
     }

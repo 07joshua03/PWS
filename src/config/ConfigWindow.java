@@ -1,6 +1,5 @@
 package config;
 
-import grid.Grid;
 import helper.DataParser;
 import helper.Slider;
 import helper.Vec2;
@@ -26,14 +25,20 @@ public class ConfigWindow extends JFrame implements ActionListener {
     private final JButton saveGridButton;
     private final JTextField saveNameField;
     private final JComboBox<String> modeList;
+    private final JCheckBox totalGridCheckBox;
+    private final JCheckBox seenGridCheckBox;
+
     public int mode;
+    public boolean totalGridVisible = true;
+    public boolean seenGridVisible = false;
 
     public ConfigWindow(int width, int height){
         mode = 0;
         setLayout(null);
         setSize(width, height);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setLocation(Main.mainWindow.getLocation().x - width, Main.mainWindow.getLocation().y);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation((dim.width/2-800/2) - width, (dim.height/2-800/2));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         mazesFromSave = new ArrayList<>();
@@ -57,7 +62,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
         sliderHeightText.setSize(25,20);
         sliderHeightText.setForeground(Color.BLACK);
 
-        changeGridButton = new JButton("Generate new Grid");
+        changeGridButton = new JButton("Generate new maze");
         changeGridButton.addActionListener(this);
         changeGridButton.setSize(175,20);
         changeGridButton.setLocation(10, 110);
@@ -104,6 +109,26 @@ public class ConfigWindow extends JFrame implements ActionListener {
         modeList.setBackground(new Color(255,255,255));
         modeList.setFocusable(false);
 
+        totalGridCheckBox = new JCheckBox();
+        totalGridCheckBox.setLocation(10,275);
+        totalGridCheckBox.setSize(20,20);
+        totalGridCheckBox.setSelected(true);
+        totalGridCheckBox.addActionListener(this);
+
+        JLabel totalGridCheckBoxText = new JLabel("See total grid");
+        totalGridCheckBoxText.setLocation(30,275);
+        totalGridCheckBoxText.setSize(80,20);
+
+        seenGridCheckBox = new JCheckBox();
+        seenGridCheckBox.setLocation(10,300);
+        seenGridCheckBox.setSize(20,20);
+        seenGridCheckBox.setSelected(false);
+        seenGridCheckBox.addActionListener(this);
+
+        JLabel seenGridCheckBoxText = new JLabel("See seen grid");
+        seenGridCheckBoxText.setLocation(30,300);
+        seenGridCheckBoxText.setSize(80,20);
+
         add(sliderWidthText);
         add(sliderWidth);
         add(sliderHeightText);
@@ -115,6 +140,10 @@ public class ConfigWindow extends JFrame implements ActionListener {
         add(saveGridButton);
         add(modeText);
         add(modeList);
+        add(totalGridCheckBox);
+        add(totalGridCheckBoxText);
+        add(seenGridCheckBox);
+        add(seenGridCheckBoxText);
         this.setVisible(true);
     }
 
@@ -127,7 +156,7 @@ public class ConfigWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == changeGridButton) {
             Main.maze.grid.changeGridSize(sliderWidth.getValue(), sliderHeight.getValue());
-            Main.maze = new Maze("", sliderWidth.getValue(), sliderHeight.getValue(), new Vec2(0,0), new Vec2(sliderWidth.getValue() - 1, sliderHeight.getValue() - 1));
+            Main.maze = Maze.generateMaze("", sliderWidth.getValue(), sliderHeight.getValue(), new Vec2(0,0), new Vec2(sliderWidth.getValue() - (sliderWidth.getValue()/2) - 1, sliderHeight.getValue() - (sliderHeight.getValue()/2) - 1));
             Main.shouldSolve = true;
             Main.render();
             //Main.mainWindow.update();
@@ -149,6 +178,10 @@ public class ConfigWindow extends JFrame implements ActionListener {
             }
         }else if(e.getSource() == modeList){
             mode = modeList.getSelectedIndex();
+        }else if(e.getSource() == totalGridCheckBox){
+            totalGridVisible = totalGridCheckBox.isSelected();
+        }else if(e.getSource() == seenGridCheckBox){
+            seenGridVisible = seenGridCheckBox.isSelected();
         }
 
     }
